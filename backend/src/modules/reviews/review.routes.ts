@@ -1,0 +1,16 @@
+import { Router } from "express";
+import { UserRole } from "../../generated/prisma/enums.js";
+import { authenticate } from "../../middleware/authenticate.js";
+import { authorize } from "../../middleware/authorize.js";
+import { validateRequest } from "../../middleware/validate.middleware.js";
+import { asyncHandler } from "../../utils/async-handler.js";
+import { createCustomerReviewController, deleteReviewController, listReviewsController, updateReviewStatusController } from "./review.controller.js";
+import { reviewCreateSchema, reviewListSchema, reviewParamsSchema, reviewStatusSchema } from "./review.schema.js";
+export const reviewRouter = Router();
+export const adminReviewRouter = Router();
+reviewRouter.use(asyncHandler(authenticate), authorize(UserRole.CUSTOMER));
+reviewRouter.post("/", validateRequest({ body: reviewCreateSchema }), asyncHandler(createCustomerReviewController));
+adminReviewRouter.use(asyncHandler(authenticate), authorize(UserRole.ADMIN));
+adminReviewRouter.get("/", validateRequest({ query: reviewListSchema }), asyncHandler(listReviewsController));
+adminReviewRouter.patch("/:reviewId/status", validateRequest({ params: reviewParamsSchema, body: reviewStatusSchema }), asyncHandler(updateReviewStatusController));
+adminReviewRouter.delete("/:reviewId", validateRequest({ params: reviewParamsSchema }), asyncHandler(deleteReviewController));

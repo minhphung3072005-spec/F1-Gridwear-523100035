@@ -1,0 +1,15 @@
+import { Router } from "express";
+import { UserRole } from "../../generated/prisma/enums.js";
+import { authenticate } from "../../middleware/authenticate.js";
+import { authorize } from "../../middleware/authorize.js";
+import { validateRequest } from "../../middleware/validate.middleware.js";
+import { asyncHandler } from "../../utils/async-handler.js";
+import { createAdminCouponController, deleteAdminCouponController, listAdminCouponsController, updateAdminCouponController, updateAdminCouponStatusController } from "./admin-coupon.controller.js";
+import { adminCouponCreateSchema, adminCouponListSchema, adminCouponStatusSchema, adminCouponUpdateSchema, couponParamsSchema } from "./admin-coupon.schema.js";
+export const adminCouponRouter = Router();
+adminCouponRouter.use(asyncHandler(authenticate), authorize(UserRole.ADMIN));
+adminCouponRouter.get("/", validateRequest({ query: adminCouponListSchema }), asyncHandler(listAdminCouponsController));
+adminCouponRouter.post("/", validateRequest({ body: adminCouponCreateSchema }), asyncHandler(createAdminCouponController));
+adminCouponRouter.put("/:couponId", validateRequest({ params: couponParamsSchema, body: adminCouponUpdateSchema }), asyncHandler(updateAdminCouponController));
+adminCouponRouter.patch("/:couponId/status", validateRequest({ params: couponParamsSchema, body: adminCouponStatusSchema }), asyncHandler(updateAdminCouponStatusController));
+adminCouponRouter.delete("/:couponId", validateRequest({ params: couponParamsSchema }), asyncHandler(deleteAdminCouponController));

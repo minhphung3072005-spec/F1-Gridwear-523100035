@@ -1,0 +1,33 @@
+# Dependencies and build outputs
+node_modules/
+dist/
+coverage/
+
+# Local configuration and secrets
+.env
+.env.*
+!.env.example
+*.local
+
+# Generated and runtime files
+backend/src/generated/prisma/
+backend/uploads/*
+!backend/uploads/.gitkeep
+*.log
+
+# Local report working files and duplicate extraction
+F1-Fashion-Store-Final-Extracted/
+report_assets/
+report_render/
+report_review_final/
+docs/hci_galitz/
+*.zip
+*.docx
+prompt.txt
+
+# Editor and operating-system files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+~$*
