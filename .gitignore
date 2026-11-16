@@ -23,6 +23,7 @@ report_review_final/
 docs/hci_galitz/
 *.zip
 *.docx
+*.pdf
 prompt.txt
 
 # Editor and operating-system files
